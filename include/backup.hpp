@@ -5,19 +5,15 @@
 #include <vector>
 #include <utility>
 
-/**
- * Função usada pelos testes:
- * executar_backup(backupParm, dirHD, dirPen, dirDestino, backupSolicitado)
- *
- * Retorna vetor de pares (nomeArquivo, codigoAcao)
- * Códigos de ação:
- * 1 = A1 Copiar HD -> Destino
- * 2 = A2 Copiar Destino -> HD
- * 3 = A3 Excluir do Destino
- * 4 = A4 Nada
- * 5 = A5 Erro
- * 6 = A6 Impossível (ex.: Backup.parm ausente)
- */
+enum Acao {
+    A1_COPIAR_HD_PEN = 1,
+    A2_COPIAR_PEN_HD,
+    A3_EXCLUIR,
+    A4_NADA,
+    A5_ERRO,
+    A6_IMPOSSIVEL
+};
+
 std::vector<std::pair<std::string,int>> executar_backup(
     const std::string &backupParm,
     const std::string &dirHD,
