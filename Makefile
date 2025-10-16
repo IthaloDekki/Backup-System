@@ -1,59 +1,106 @@
+# ============================================
+# Makefile para Sistema de Backup com Catch2
+# ============================================
+
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall
+CXXFLAGS = -std=c++17 -Wall -Iinclude
+LDFLAGS = -lstdc++fs           # <- Necessário para <filesystem> (GCC até 11)
 
-SRC = velha.cpp catch_amalgamated.cpp
-TEST = testa_velha.cpp
+SRCDIR = src
+INCDIR = include
+TESTDIR = tests
+
+SRC = $(SRCDIR)/backup.cpp $(SRCDIR)/catch_amalgamated.cpp
+TEST = $(TESTDIR)/testa_backup.cpp
 OBJ = $(SRC:.cpp=.o)
+TARGET = testa_backup
 
-all: testa_velha
-	./testa_velha
-	#use comentario se necessario
+.PHONY: all compile test cpplint cppcheck gcov debug valgrind docs clean
 
-compile: $(OBJ) $(TEST)
-	$(CXX) $(CXXFLAGS) -o testa_velha $(OBJ) $(TEST)
+# ============================================
+# Regras principais
+# ============================================
 
-velha.o : velha.cpp velha.hpp
-	$(CXX) $(CXXFLAGS) -c velha.cpp
+all: $(TARGET)
+	./$(TARGET)
 
-catch_amalgamated.o: catch_amalgamated.cpp catch_amalgamated.hpp
-	$(CXX) $(CXXFLAGS) -c catch_amalgamated.cpp
+# Linka executável de testes
+$(TARGET): $(OBJ) $(TEST)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST) $(LDFLAGS)
 
-testa_velha: $(OBJ) $(TEST)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST)
+# Compila .cpp → .o
+$(SRCDIR)/%.o: $(SRCDIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-test: testa_velha
-	./testa_velha
+compile: $(TARGET)
+
+test: $(TARGET)
+	./$(TARGET)
+
+# ============================================
+# Análise de código
+# ============================================
 
 cpplint:
-	cpplint velha.cpp velha.hpp testa_velha.cpp
-
-gcov: $(SRC) $(TEST)
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c velha.cpp
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c catch_amalgamated.cpp
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage velha.o catch_amalgamated.o $(TEST) -o testa_velha
-	./testa_velha
-	gcov velha.cpp
-
-debug: $(SRC) $(TEST)
-	$(CXX) $(CXXFLAGS) -g -c velha.cpp
-	$(CXX) $(CXXFLAGS) -g -c catch_amalgamated.cpp
-	$(CXX) $(CXXFLAGS) -g velha.o catch_amalgamated.o $(TEST) -o testa_velha
-	gdb testa_velha
+	python3 -m cpplint $(SRCDIR)/backup.cpp $(INCDIR)/backup.hpp $(TEST)
 
 cppcheck:
-	cppcheck --enable=warning --std=c++14 \
+	cppcheck --enable=warning --std=c++17 \
 		--check-level=exhaustive \
 		--suppress=missingIncludeSystem \
 		--suppress=uninitMemberVar \
 		--suppress=duplInheritedMember \
-		--suppress=syntaxError:catch_amalgamated.hpp \
-		--suppress=syntaxError:testa_velha.cpp \
+		--suppress=syntaxError:$(INCDIR)/catch_amalgamated.hpp \
+		--suppress=syntaxError:$(TEST) \
 		--force \
-		velha.cpp velha.hpp testa_velha.cpp
+		$(SRCDIR) $(INCDIR) $(TESTDIR)
 
+# ============================================
+# Cobertura (gcov)
+# ============================================
 
-valgrind: testa_velha
-	valgrind --leak-check=yes --log-file=valgrind.rpt ./testa_velha
+gcov: clean
+	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c $(SRCDIR)/backup.cpp
+	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c $(SRCDIR)/catch_amalgamated.cpp
+	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage $(SRCDIR)/backup.o $(SRCDIR)/catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+	./$(TARGET)
+	gcov -o . $(SRCDIR)/backup.cpp
+
+# ============================================
+# Debug e Valgrind
+# ============================================
+
+debug:
+	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/backup.cpp
+	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/catch_amalgamated.cpp
+	$(CXX) $(CXXFLAGS) -g $(SRCDIR)/backup.o $(SRCDIR)/catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+	gdb $(TARGET)
+
+valgrind: $(TARGET)
+	valgrind --leak-check=yes --show-leak-kinds=all --log-file=valgrind.rpt ./$(TARGET)
+
+# ============================================
+# Geração de documentação (Doxygen)
+# ============================================
+
+docs: Doxyfile
+	doxygen Doxyfile
+	@echo "📘 Documentação gerada em ./docs/html/index.html"
+
+Doxyfile:
+	doxygen -g Doxyfile
+	sed -i 's|^INPUT .*|INPUT = src include|' Doxyfile
+	sed -i 's|^RECURSIVE .*|RECURSIVE = NO|' Doxyfile
+	sed -i 's|^OUTPUT_DIRECTORY .*|OUTPUT_DIRECTORY = docs|' Doxyfile
+	sed -i 's|^EXCLUDE .*|EXCLUDE = src/catch_amalgamated.cpp include/catch_amalgamated.hpp|' Doxyfile
+	sed -i 's|^GENERATE_LATEX .*|GENERATE_LATEX = NO|' Doxyfile
+	sed -i 's|^GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
+	sed -i 's|^EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
+
+# ============================================
+# Limpeza
+# ============================================
 
 clean:
-	rm -rf *.o *.exe *.gc* testa_velha
+	rm -rf $(SRCDIR)/*.o *.o *.gc* $(TARGET) valgrind.rpt docs Doxyfile *.gcov *.info
+	rm -rf backup-destino/*
