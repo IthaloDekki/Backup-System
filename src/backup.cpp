@@ -14,5 +14,13 @@ std::vector<std::pair<std::string,int>> executar_backup(
     const std::string &dirDestino,
     bool backupSolicitado)
 {
-    return std::vector<std::pair<std::string,int>>();
+    std::vector<std::pair<std::string,int>> resultados;
+    std::error_code ec;
+
+    if (!fs::exists(fs::path(backupParm), ec)) {
+        resultados.emplace_back(std::make_pair(std::string("Backup.parm"), 6)); // A6_IMPOSSIVEL
+        return resultados;
+    }
+
+    return resultados;
 }
