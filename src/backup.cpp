@@ -104,9 +104,9 @@ std::vector<std::pair<std::string,int>> executar_backup(
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
             } 
             else if (existeHD && existePen && dataPen > dataHD) {
-                // Caso 7 - Pen mais novo => restaurar
-                fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
+                // // Caso 7 - Pen mais novo => restaurar
+                // fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                // resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
             } 
             else if (existeHD && existePen) {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
