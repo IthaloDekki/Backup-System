@@ -46,5 +46,27 @@ std::vector<std::pair<std::string,int>> executar_backup(
         return resultados;
     }
 
+    
+    // le o arquivo .parm
+    std::ifstream parmFile(backupParm);
+    std::string nomeArquivo;
+
+    while (std::getline(parmFile, nomeArquivo)) {
+        if (nomeArquivo.empty())
+            continue;
+
+        fs::path caminhoHD = fs::path(dirHD) / nomeArquivo;
+        fs::path caminhoPen = fs::path(dirPen) / nomeArquivo;
+        fs::path caminhoDestino = fs::path(dirDestino) / nomeArquivo;
+
+        
+        if (backupSolicitado) {
+            bool existeHD = fs::exists(caminhoHD);
+            bool existePen = fs::exists(caminhoPen);
+        }
+        
+    }
+
+
     return resultados;
 }
