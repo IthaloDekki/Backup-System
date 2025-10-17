@@ -255,7 +255,11 @@ TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]"
     fs::remove_all(base);
     fs::create_directories(base / "hd");
     fs::create_directories(base / "pen");
-    fs::create_directories("backup-destino");
+
+    // DESTINO isolado por caso (agora fica dentro de base)
+    fs::path destino = base / "backup-destino";
+    fs::remove_all(destino);
+    fs::create_directories(destino);
 
     fs::path parm = base / "Backup.parm";
     std::ofstream(parm) << "relatorio.txt" << std::endl;
@@ -271,7 +275,7 @@ TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]"
     fs::last_write_time(arqPen, agora);
 
     // backupSolicitado = false → restauração
-    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", false);
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, false);
 
     bool found = false;
     for (auto &p : res)
@@ -279,7 +283,7 @@ TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]"
             found = true;
 
     REQUIRE(found == true);
-    REQUIRE(!fs::exists("backup-destino/relatorio.txt"));
+    REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
 
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
