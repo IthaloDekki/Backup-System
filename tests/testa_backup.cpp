@@ -62,6 +62,37 @@ TEST_CASE("Caso 2 - Backup solicitado, arquivo só no HD => Copiar HD->Pen (A1)"
     REQUIRE(fs::exists("backup-destino/documento.txt"));
 }
 
+TEST_CASE("Caso 3 - Restauração: arquivo no Pen e não no HD => Copiar Pen->HD (A2)", "[C3]") {
+    namespace fs = std::filesystem;
+
+    fs::path base = fs::path("tests") / "tmp_case_3";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+    fs::create_directories("backup-destino");
+
+    // Cria Backup.parm com o nome do arquivo
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "relatorio.txt" << std::endl;
+
+    // Cria arquivo apenas no Pen (origem da restauração)
+    fs::path arquivoPen = base / "pen" / "relatorio.txt";
+    std::ofstream(arquivoPen) << "conteudo do pen";
+
+    // Executa restauração (backupSolicitado = false)
+    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", false);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "relatorio.txt" && p.second == 2) // A2 = Copiar Pen->HD
+            found = true;
+
+    // Verifica se o arquivo foi copiado para o destino
+    REQUIRE(found == true);
+    REQUIRE(fs::exists("backup-destino/relatorio.txt"));
+}
+
+
 
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
 #include <utility>
