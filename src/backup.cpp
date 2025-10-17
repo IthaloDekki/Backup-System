@@ -61,64 +61,39 @@ std::vector<std::pair<std::string,int>> executar_backup(
 
         bool existeHD = fs::exists(caminhoHD);
         bool existePen = fs::exists(caminhoPen);
+
         auto dataHD = existeHD ? fs::last_write_time(caminhoHD) : fs::file_time_type::min();
         auto dataPen = existePen ? fs::last_write_time(caminhoPen) : fs::file_time_type::min();
 
-        //mesma data → nada
-        auto diff = (dataHD > dataPen) ? (dataHD - dataPen) : (dataPen - dataHD);
-        if (existeHD && existePen && diff < std::chrono::seconds(1)) {
-            resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
-            continue;
-        }
-
         if (backupSolicitado) {
             if (existeHD && !existePen) {
-                // HD apenas → copiar
                 fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
             } 
-            else if (existeHD && existePen) {
-                if (dataHD > dataPen) {
-                    // HD mais novo → atualizar Pen
-                    fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
-                } 
-                else if (dataPen > dataHD) {
-                    // Pen mais novo → erro lógico
-                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A5_ERRO));
-                } 
-                else {
-                    // Mesma data → nada
-                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
-                }
+            else if (existeHD && existePen && dataHD > dataPen) {
+                fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
+            } 
+            else if (existeHD && existePen && dataPen > dataHD) {
+                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A5_ERRO));
             } 
             else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
-        }
-        // restauração pen->hd
-        else { 
+        } else {
             if (!existeHD && existePen) {
-                // Caso 3 - só existe no Pen
                 fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
             } 
             else if (existeHD && existePen && dataPen > dataHD) {
-                // // Caso 7 - Pen mais novo => restaurar
-                // fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                // resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
-            } 
-            else if (existeHD && existePen) {
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
+                fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
             } 
             else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
         }
-
     }
-
-
 
     return resultados;
 }
