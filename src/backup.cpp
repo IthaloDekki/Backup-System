@@ -61,21 +61,17 @@ std::vector<std::pair<std::string,int>> executar_backup(
 
         bool existeHD = fs::exists(caminhoHD);
         bool existePen = fs::exists(caminhoPen);
-
         auto dataHD = existeHD ? fs::last_write_time(caminhoHD) : fs::file_time_type::min();
         auto dataPen = existePen ? fs::last_write_time(caminhoPen) : fs::file_time_type::min();
 
-        // Comparação com tolerância de 1 segundo
+        //mesma data → nada
         auto diff = (dataHD > dataPen) ? (dataHD - dataPen) : (dataPen - dataHD);
-        bool mesmasDatas = diff < std::chrono::seconds(1);
-
-        // Caso de datas iguais
-        if (existeHD && existePen && mesmasDatas) {
+        if (existeHD && existePen && diff < std::chrono::seconds(1)) {
             resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             continue;
         }
 
-        // Backup solicitado (HD→Pen)
+        //backup solicitado (HD→Pen)
         if (backupSolicitado) {
             if (existeHD && (!existePen || dataHD > dataPen)) {
                 fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
@@ -83,7 +79,9 @@ std::vector<std::pair<std::string,int>> executar_backup(
             } else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
-        } else { // Restauração (Pen→HD)
+        }
+        // restauração (Pen→HD)
+        else {
             if (existePen && (!existeHD || dataPen > dataHD)) {
                 fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
@@ -92,6 +90,7 @@ std::vector<std::pair<std::string,int>> executar_backup(
             }
         }
     }
+
 
 
     return resultados;
