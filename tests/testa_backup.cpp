@@ -319,7 +319,37 @@ TEST_CASE("Caso 9 - Restauração: arquivo não existe em nenhum diretório => I
     REQUIRE(!fs::exists(destino / "fantasma.txt"));
 }
 
+TEST_CASE("Caso 10 - Backup solicitado: arquivo não existe nem no HD nem no Pen => Impossível (A6)", "[C10]") {
+    namespace fs = std::filesystem;
 
+    // Base isolada para este caso
+    fs::path base = fs::path("tests") / "tmp_case_10";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+
+    // Cria destino isolado
+    fs::path destino = base / "backup-destino";
+    fs::remove_all(destino);
+    fs::create_directories(destino);
+
+    // Cria Backup.parm com arquivo inexistente
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "arquivo_inexistente.txt" << std::endl;
+
+    // Executa o backup (HD → Pen)
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, true);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "arquivo_inexistente.txt" && p.second == A6) // A6 = Impossível
+            found = true;
+
+    REQUIRE(found == true);
+
+    // O arquivo não deve existir no destino
+    REQUIRE(!fs::exists(destino / "arquivo_inexistente.txt"));
+}
 
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
 #include <utility>
