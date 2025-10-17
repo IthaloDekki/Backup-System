@@ -73,22 +73,25 @@ std::vector<std::pair<std::string,int>> executar_backup(
 
         if (backupSolicitado) {
             if (existeHD && !existePen) {
-                // Caso 2 - arquivo só no HD
+                // HD apenas → copiar
                 fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
-            }
-            else if (existeHD && existePen && dataHD > dataPen) {
-                // Caso 5 - HD mais novo
-                fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
-            }
-            else if (existeHD && existePen && dataPen > dataHD) {
-                // Caso 6 - Pen mais novo (erro lógico)
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A5_ERRO));
-            }
+            } 
             else if (existeHD && existePen) {
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
-            }
+                if (dataHD > dataPen) {
+                    // HD mais novo → atualizar Pen
+                    fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A1_COPIAR_HD_PEN));
+                } 
+                else if (dataPen > dataHD) {
+                    // Pen mais novo → erro lógico
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A5_ERRO));
+                } 
+                else {
+                    // Mesma data → nada
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
+                }
+            } 
             else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
