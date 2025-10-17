@@ -80,18 +80,24 @@ std::vector<std::pair<std::string,int>> executar_backup(
             else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
-        } else {
+        } 
+        else {
             if (!existeHD && existePen) {
                 fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
             } 
-            else if (existeHD && existePen && dataPen > dataHD) {
-                fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
-            }
-            else if (existeHD && existePen && dataPen == dataHD) {
-                resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
-            }
+            else if (existeHD && existePen) {
+                if (dataPen > dataHD) {
+                    fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A2_COPIAR_PEN_HD));
+                } 
+                else if (dataPen == dataHD) {
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
+                } 
+                else {
+                    resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
+                }
+            } 
             else {
                 resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
             }
