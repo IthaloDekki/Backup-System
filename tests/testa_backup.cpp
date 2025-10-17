@@ -286,6 +286,41 @@ TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]"
     REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
 
+TEST_CASE("Caso 9 - Restauração: arquivo não existe em nenhum diretório => Impossível restaurar (A6)", "[C9]") {
+    namespace fs = std::filesystem;
+
+    // Base de teste isolada
+    fs::path base = fs::path("tests") / "tmp_case_9";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+
+    // Cria destino isolado
+    fs::path destino = base / "backup-destino";
+    fs::remove_all(destino);
+    fs::create_directories(destino);
+
+    // Cria arquivo Backup.parm com nome de um arquivo inexistente
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "fantasma.txt" << std::endl;
+
+    // Executa restauração (backupSolicitado = false)
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, false);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "fantasma.txt" && p.second == A6) // A6 = Impossível
+            found = true;
+
+    // Verifica se o caso foi identificado corretamente
+    REQUIRE(found == true);
+
+    // O arquivo não deve ter sido criado no destino
+    REQUIRE(!fs::exists(destino / "fantasma.txt"));
+}
+
+
+
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
 #include <utility>
 extern std::vector<std::pair<std::string,int>> executar_backup(
