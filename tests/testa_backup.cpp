@@ -133,6 +133,47 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
     REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
 
+TEST_CASE("Caso 5 - Backup solicitado, arquivo do HD mais novo => Copiar HD->Pen (A1)", "[C5]") {
+    namespace fs = std::filesystem;
+
+    fs::path base = fs::path("tests") / "tmp_case_5";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+    fs::path destino = base / "backup-destino";
+    fs::create_directories(destino);
+
+    // Cria Backup.parm
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "dados.txt" << std::endl;
+
+    // Cria arquivo em ambos os lugares
+    fs::path arquivoHD = base / "hd" / "dados.txt";
+    fs::path arquivoPen = base / "pen" / "dados.txt";
+    std::ofstream(arquivoHD) << "conteudo atualizado no HD";
+    std::ofstream(arquivoPen) << "conteudo antigo no Pen";
+
+    // Ajusta as datas: HD mais novo
+    auto agora = fs::file_time_type::clock::now();
+    auto antes = agora - std::chrono::hours(1);
+    fs::last_write_time(arquivoPen, antes);
+    fs::last_write_time(arquivoHD, agora);
+
+    // Executa o backup
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, true);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "dados.txt" && p.second == 1) // A1 = Copiar HD→Pen
+            found = true;
+
+    REQUIRE(found == true);
+
+    // O arquivo destino (Pen simulado) deve existir e conter o conteúdo atualizado
+    REQUIRE(fs::exists(destino / "dados.txt"));
+}
+
+
 
 
 
