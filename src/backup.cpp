@@ -59,38 +59,25 @@ std::vector<std::pair<std::string,int>> executar_backup(
         fs::path caminhoPen = fs::path(dirPen) / nomeArquivo;
         fs::path caminhoDestino = fs::path(dirDestino) / nomeArquivo;
 
-        
-        if (backupSolicitado) {
-            bool existeHD = fs::exists(caminhoHD);
-            bool existePen = fs::exists(caminhoPen);
+        bool existeHD = fs::exists(caminhoHD);
+        bool existePen = fs::exists(caminhoPen);
 
-            if (existeHD && !existePen) {
-                // HD → destino
-                fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                resultados.emplace_back(nomeArquivo,
-                    static_cast<int>(Acao::A1_COPIAR_HD_PEN));
-            } else {
-                
-                resultados.emplace_back(nomeArquivo,
-                    static_cast<int>(Acao::A4_NADA));
-            }
-        }
+        if (backupSolicitado && existeHD && !existePen) {
+            fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+            resultados.emplace_back(nomeArquivo,
+                static_cast<int>(Acao::A1_COPIAR_HD_PEN));
+        } 
+        else if (!backupSolicitado && !existeHD && existePen) {
+            fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+            resultados.emplace_back(nomeArquivo,
+                static_cast<int>(Acao::A2_COPIAR_PEN_HD));
+        } 
         else {
-            bool existeHD = fs::exists(caminhoHD);
-            bool existePen = fs::exists(caminhoPen);
-
-            if (!existeHD && existePen) {
-                // copia arquivo Pen → destino
-                fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
-                resultados.emplace_back(nomeArquivo,
-                    static_cast<int>(Acao::A2_COPIAR_PEN_HD));
-            } else {
-                resultados.emplace_back(nomeArquivo,
-                    static_cast<int>(Acao::A4_NADA));
-            }
+            resultados.emplace_back(nomeArquivo,
+                static_cast<int>(Acao::A4_NADA));
         }
-        
     }
+
 
 
     return resultados;
