@@ -62,6 +62,11 @@ std::vector<std::pair<std::string,int>> executar_backup(
         bool existeHD = fs::exists(caminhoHD);
         bool existePen = fs::exists(caminhoPen);
 
+        if (!existeHD && !existePen) {
+            resultados.push_back({nomeArquivo, A6_IMPOSSIVEL}); // Impossível
+            continue;
+        }
+
         auto dataHD = existeHD ? fs::last_write_time(caminhoHD) : fs::file_time_type::min();
         auto dataPen = existePen ? fs::last_write_time(caminhoPen) : fs::file_time_type::min();
 
