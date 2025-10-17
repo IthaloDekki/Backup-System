@@ -1,0 +1,132 @@
+Trabalho TDD – Técnicas de Programação 2
+Autor: Íthalo Júnio Medeiros de Oliveira Nóbrega
+Matrícula: 222008806
+
+=====================================================
+Descrição do Projeto
+=====================================================
+O objetivo deste trabalho é utilizar o desenvolvimento orientado a testes (TDD)
+para implementar um sistema de backup automatizado.
+
+O sistema lê o arquivo “Backup.parm” e realiza o backup de todos os arquivos
+listados para um diretório que simula um pendrive (chamado "backup-destino").
+Também é possível restaurar o conteúdo do backup para o local original.
+
+Durante o processo, são tratados diversos cenários conforme a tabela de decisão,
+garantindo que cada condição e resultado esperado seja testado.
+
+O projeto foi desenvolvido em C++17 com o framework de testes Catch2,
+seguindo o padrão de estilo Google C++, e utilizando ferramentas de apoio:
+- **cpplint** (verificação de estilo)
+- **cppcheck** (análise estática)
+- **gcov** (cobertura de testes)
+- **gdb** (depuração)
+- **valgrind** (verificação dinâmica de memória)
+- **doxygen** (geração de documentação)
+
+=====================================================
+Instruções de Compilação e Execução
+=====================================================
+
+O projeto utiliza um Makefile para automatizar todas as etapas de compilação,
+testes, verificação de estilo e geração de documentação.
+
+-----------------------------------------------------
+1- Compilar o programa
+-----------------------------------------------------
+$ make compile
+
+Gera o executável principal:
+  ./testa_backup
+
+-----------------------------------------------------
+2- Executar os testes
+-----------------------------------------------------
+$ make test
+
+Ou simplesmente:
+$ make
+
+Executa todos os testes definidos no arquivo:
+  tests/testa_backup.cpp
+
+-----------------------------------------------------
+3- Verificação de estilo (cpplint)
+-----------------------------------------------------
+$ make cpplint
+
+Verifica se o código segue o padrão de estilo Google C++,
+aplicado aos arquivos:
+  src/backup.cpp
+  include/backup.hpp
+  tests/testa_backup.cpp
+
+-----------------------------------------------------
+4- Análise estática (cppcheck)
+-----------------------------------------------------
+$ make cppcheck
+
+Executa o analisador estático cppcheck com regras de aviso e
+checagem exaustiva, ignorando erros de bibliotecas externas.
+
+-----------------------------------------------------
+5- Verificação de cobertura (gcov)
+-----------------------------------------------------
+$ make gcov
+
+Compila o código com suporte à cobertura, executa os testes
+e gera os arquivos de relatório de cobertura (.gcov) referentes
+ao módulo:
+  src/backup.cpp
+
+-----------------------------------------------------
+6- Depuração com GDB
+-----------------------------------------------------
+$ make debug
+
+Compila o projeto com símbolos de depuração e abre o GDB:
+  gdb testa_backup
+
+-----------------------------------------------------
+7- Verificação dinâmica (Valgrind)
+-----------------------------------------------------
+$ make valgrind
+
+Executa o programa de testes com Valgrind, verificando vazamentos
+de memória e grava o relatório no arquivo:
+  valgrind.rpt
+
+A saída esperada (sem vazamentos) deve conter:
+==XXXX== All heap blocks were freed -- no leaks are possible
+
+-----------------------------------------------------
+8- Geração da documentação (Doxygen)
+-----------------------------------------------------
+$ make docs
+
+Cria a documentação completa do código em:
+  ./docs/html/index.html
+
+-----------------------------------------------------
+9- Limpeza de arquivos gerados
+-----------------------------------------------------
+$ make clean
+
+Remove todos os arquivos temporários, objetos, executáveis,
+arquivos de cobertura, relatórios e documentação gerada.
+
+=====================================================
+Observações
+=====================================================
+- Compilador utilizado: g++
+- Padrão C++: C++17
+- Diretórios principais:
+    src/       → código-fonte principal
+    include/   → cabeçalhos (.hpp)
+    tests/     → testes de unidade (Catch2)
+    backup-destino/ → diretório que simula o pendrive
+- O programa foi testado com Valgrind e não apresenta vazamentos
+  de memória ou acessos inválidos.
+- A documentação foi gerada com Doxygen e está disponível em HTML.
+- O projeto segue o estilo Google C++ e passa em todas as verificações
+  do cpplint.
