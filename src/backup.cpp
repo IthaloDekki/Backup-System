@@ -75,6 +75,20 @@ std::vector<std::pair<std::string,int>> executar_backup(
                     static_cast<int>(Acao::A4_NADA));
             }
         }
+        else {
+            bool existeHD = fs::exists(caminhoHD);
+            bool existePen = fs::exists(caminhoPen);
+
+            if (!existeHD && existePen) {
+                // copia arquivo Pen → destino
+                fs::copy_file(caminhoPen, caminhoDestino, fs::copy_options::overwrite_existing, ec);
+                resultados.emplace_back(nomeArquivo,
+                    static_cast<int>(Acao::A2_COPIAR_PEN_HD));
+            } else {
+                resultados.emplace_back(nomeArquivo,
+                    static_cast<int>(Acao::A4_NADA));
+            }
+        }
         
     }
 
