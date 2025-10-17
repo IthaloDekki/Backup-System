@@ -63,7 +63,7 @@ std::vector<std::pair<std::string,int>> executar_backup(
         bool existePen = fs::exists(caminhoPen);
 
         if (!existeHD && !existePen) {
-            resultados.push_back({nomeArquivo, A6_IMPOSSIVEL}); // Impossível
+            resultados.emplace_back(nomeArquivo, A6_IMPOSSIVEL);
             continue;
         }
 
