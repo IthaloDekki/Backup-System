@@ -1,10 +1,10 @@
 # ============================================
-# Makefile para Sistema de Backup com Catch2
+# Makefile para Sistema de Backup (TP2 - TDD)
 # ============================================
 
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Iinclude
-LDFLAGS = -lstdc++fs           # <- Necessário para <filesystem> (GCC até 11)
+LDFLAGS = -lstdc++fs          # Necessário para <filesystem> em GCC < 12
 
 SRCDIR = src
 INCDIR = include
@@ -18,31 +18,31 @@ TARGET = testa_backup
 .PHONY: all compile test cpplint cppcheck gcov debug valgrind docs clean
 
 # ============================================
-# Regras principais
+# Compilação e execução
 # ============================================
 
 all: $(TARGET)
 	./$(TARGET)
+	# use comentário se necessário
 
-# Linka executável de testes
-$(TARGET): $(OBJ) $(TEST)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST) $(LDFLAGS)
+compile: $(OBJ) $(TEST)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(TEST) $(LDFLAGS)
 
-# Compila .cpp → .o
-$(SRCDIR)/%.o: $(SRCDIR)/%.cpp
+$(SRCDIR)/%.o: $(SRCDIR)/%.cpp $(INCDIR)/%.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-compile: $(TARGET)
+$(TARGET): $(OBJ) $(TEST)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST) $(LDFLAGS)
 
 test: $(TARGET)
 	./$(TARGET)
 
 # ============================================
-# Análise de código
+# Verificadores de estilo e análise estática
 # ============================================
 
 cpplint:
-	python3 -m cpplint $(SRCDIR)/backup.cpp $(INCDIR)/backup.hpp $(TEST)
+	cpplint $(SRCDIR)/backup.cpp $(INCDIR)/backup.hpp $(TEST)
 
 cppcheck:
 	cppcheck --enable=warning --std=c++17 \
@@ -50,42 +50,51 @@ cppcheck:
 		--suppress=missingIncludeSystem \
 		--suppress=uninitMemberVar \
 		--suppress=duplInheritedMember \
-		--suppress=syntaxError:$(INCDIR)/catch_amalgamated.hpp \
-		--suppress=syntaxError:$(TEST) \
+		--suppress=syntaxError:tests/testa_backup.cpp \
+		--suppress=syntaxError:include/catch_amalgamated.hpp \
 		--force \
-		$(SRCDIR) $(INCDIR) $(TESTDIR)
+		src/backup.cpp include/backup.hpp tests/testa_backup.cpp
+
 
 # ============================================
-# Cobertura (gcov)
+# Teste de cobertura (GCOV)
 # ============================================
 
 gcov: clean
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c $(SRCDIR)/backup.cpp
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c $(SRCDIR)/catch_amalgamated.cpp
-	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage $(SRCDIR)/backup.o $(SRCDIR)/catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage -c $(SRCDIR)/backup.cpp -o backup.o
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/catch_amalgamated.cpp -o catch_amalgamated.o
+
+	$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage \
+		backup.o catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+
 	./$(TARGET)
+
 	gcov -o . $(SRCDIR)/backup.cpp
 
+
+
 # ============================================
-# Debug e Valgrind
+# Depuração (GDB) e Análise Dinâmica (Valgrind)
 # ============================================
 
 debug:
-	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/backup.cpp
-	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/catch_amalgamated.cpp
-	$(CXX) $(CXXFLAGS) -g $(SRCDIR)/backup.o $(SRCDIR)/catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/backup.cpp -o backup.o
+	$(CXX) $(CXXFLAGS) -g -c $(SRCDIR)/catch_amalgamated.cpp -o catch_amalgamated.o
+	$(CXX) $(CXXFLAGS) -g backup.o catch_amalgamated.o $(TEST) -o $(TARGET) $(LDFLAGS)
+
 	gdb $(TARGET)
 
+
 valgrind: $(TARGET)
-	valgrind --leak-check=yes --show-leak-kinds=all --log-file=valgrind.rpt ./$(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind.rpt ./$(TARGET)
 
 # ============================================
-# Geração de documentação (Doxygen)
+# Geração da Documentação (Doxygen)
 # ============================================
 
 docs: Doxyfile
 	doxygen Doxyfile
-	@echo "📘 Documentação gerada em ./docs/html/index.html"
+	@echo "Documentação gerada em ./docs/html/index.html"
 
 Doxyfile:
 	doxygen -g Doxyfile

@@ -1,22 +1,30 @@
+// Copyright 2025 Íthalo Júnio Medeiros de Oliveira Nóbrega
 
 #define CATCH_CONFIG_MAIN
-#include "../src/catch_amalgamated.hpp"
-#include <filesystem>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <system_error>
+
+// C++ system headers
 #include <cassert>
+#include <filesystem>  // NOLINT(build/c++17)
+#include <fstream>
+#include <string>
+#include <system_error>
+#include <vector>
+
+// Other headers
+#include "../src/catch_amalgamated.hpp"
 
 namespace fs = std::filesystem;
 
 static constexpr int A6 = 6;
 
-static std::vector<std::pair<std::string,int>> run_proc(
-    const fs::path &parm, const fs::path &hd, const fs::path &pen, const fs::path &dest, bool backupSolicitado);
+static std::vector<std::pair<std::string, int>> run_proc(
+    const fs::path &parm,
+    const fs::path &hd,
+    const fs::path &pen,
+    const fs::path &dest,
+    bool backupSolicitado);
 
 TEST_CASE("Caso 1 - Sem Backup.parm => Impossivel (A6)", "[C1]") {
-
     fs::path base = fs::path("tests") / "tmp_case_1";
     fs::remove_all(base);
     fs::create_directories(base / "hd");
@@ -25,14 +33,16 @@ TEST_CASE("Caso 1 - Sem Backup.parm => Impossivel (A6)", "[C1]") {
 
     fs::path parm = base / "Backup.parm";
 
-    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", true);
+    auto res = run_proc(parm, base / "hd", base / "pen",
+    "backup-destino", true);
 
     bool found = false;
     for (auto &p : res) if (p.second == A6) found = true;
     REQUIRE(found == true);
 }
 
-TEST_CASE("Caso 2 - Backup solicitado, arquivo só no HD => Copiar HD->Pen (A1)", "[C2]") {
+TEST_CASE("Caso 2 arquivo só no HD => Copiar HD->Pen",
+    "[C2]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_2";
@@ -50,11 +60,12 @@ TEST_CASE("Caso 2 - Backup solicitado, arquivo só no HD => Copiar HD->Pen (A1)"
     std::ofstream(arquivoHD) << "conteudo do arquivo HD";
 
     // Executa o backup
-    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", true);
+    auto res = run_proc(parm, base / "hd", base / "pen",
+    "backup-destino", true);
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "documento.txt" && p.second == 1) // A1 = Copiar HD→Pen
+        if (p.first == "documento.txt" && p.second == 1)  // A1 = Copiar HD→Pen
             found = true;
 
     // O arquivo deve ter sido copiado para o destino (pen)
@@ -62,7 +73,8 @@ TEST_CASE("Caso 2 - Backup solicitado, arquivo só no HD => Copiar HD->Pen (A1)"
     REQUIRE(fs::exists("backup-destino/documento.txt"));
 }
 
-TEST_CASE("Caso 3 - Restauração: arquivo no Pen e não no HD => Copiar Pen->HD (A2)", "[C3]") {
+TEST_CASE("Caso 3 arquivo no Pen e não no HD => Copiar Pen->HD",
+    "[C3]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_3";
@@ -80,11 +92,12 @@ TEST_CASE("Caso 3 - Restauração: arquivo no Pen e não no HD => Copiar Pen->HD
     std::ofstream(arquivoPen) << "conteudo do pen";
 
     // Executa restauração (backupSolicitado = false)
-    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", false);
+    auto res = run_proc(parm, base / "hd", base / "pen",
+    "backup-destino", false);
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "relatorio.txt" && p.second == 2) // A2 = Copiar Pen->HD
+        if (p.first == "relatorio.txt" && p.second == 2)  // A2 = Copiar Pen->HD
             found = true;
 
     // Verifica se o arquivo foi copiado para o destino
@@ -92,7 +105,8 @@ TEST_CASE("Caso 3 - Restauração: arquivo no Pen e não no HD => Copiar Pen->HD
     REQUIRE(fs::exists("backup-destino/relatorio.txt"));
 }
 
-TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (A4)", "[C4]") {
+TEST_CASE("Caso 4 arquivos com mesma data => Nada a fazer",
+    "[C4]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_4";
@@ -124,7 +138,7 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "relatorio.txt" && p.second == 4) // A4 = Nada
+        if (p.first == "relatorio.txt" && p.second == 4)  // A4 = Nada
             found = true;
 
     REQUIRE(found == true);
@@ -133,7 +147,8 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
     REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
 
-TEST_CASE("Caso 5 - Backup solicitado, arquivo do HD mais novo => Copiar HD->Pen (A1)", "[C5]") {
+TEST_CASE("Caso 5 arquivo do HD mais novo => Copiar HD->Pen",
+    "[C5]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_5";
@@ -164,16 +179,19 @@ TEST_CASE("Caso 5 - Backup solicitado, arquivo do HD mais novo => Copiar HD->Pen
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "dados.txt" && p.second == 1) // A1 = Copiar HD→Pen
+        if (p.first == "dados.txt" && p.second == 1)  // A1 = Copiar HD→Pen
             found = true;
 
     REQUIRE(found == true);
 
-    // O arquivo destino (Pen simulado) deve existir e conter o conteúdo atualizado
-    REQUIRE(fs::exists(destino / "dados.txt"));
+    // O arquivo destino (Pen simulado) deve
+    // existir e conter o conteúdo atualizado
+    REQUIRE(fs::exists(destino
+    / "dados.txt"));
 }
 
-TEST_CASE("Caso 6 - Backup solicitado, Pen mais novo que HD => Erro (A5)", "[C6]") {
+TEST_CASE("Caso 6 Backup solicitado, Pen mais novo que HD => Erro",
+    "[C6]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_6";
@@ -203,16 +221,18 @@ TEST_CASE("Caso 6 - Backup solicitado, Pen mais novo que HD => Erro (A5)", "[C6]
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "dados.txt" && p.second == 5) // A5 = Erro
+        if (p.first == "dados.txt" && p.second == 5)  // A5 = Erro
             found = true;
 
     REQUIRE(found == true);
 
     // O arquivo destino NÃO deve existir (pois é erro)
-    REQUIRE(!fs::exists(destino / "dados.txt"));
+    REQUIRE(!fs::exists(destino
+    / "dados.txt"));
 }
 
-TEST_CASE("Caso 7 - Restauração: Pen mais novo que HD => Copiar Pen->HD (A2)", "[C7]") {
+TEST_CASE("Caso 7 Restauração: Pen mais novo que HDCopiar Pen->HD",
+    "[C7]") {
     namespace fs = std::filesystem;
 
     fs::path base = fs::path("tests") / "tmp_case_7";
@@ -234,22 +254,24 @@ TEST_CASE("Caso 7 - Restauração: Pen mais novo que HD => Copiar Pen->HD (A2)",
 
     // Ajusta timestamps
     auto agora = fs::file_time_type::clock::now();
-    fs::last_write_time(arquivoHD, agora - std::chrono::hours(1)); // HD mais velho
-    fs::last_write_time(arquivoPen, agora); // Pen mais novo
+    fs::last_write_time(arquivoHD,
+    agora - std::chrono::hours(1));  // HD mais velho
+    fs::last_write_time(arquivoPen, agora);  // Pen mais novo
 
     // Executa restauração (backupSolicitado = false)
     auto res = run_proc(parm, base / "hd", base / "pen", destino, false);
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "dados.txt" && p.second == 2) // A2 = Copiar Pen->HD
+        if (p.first == "dados.txt" && p.second == 2)  // A2 = Copiar Pen->HD
             found = true;
 
     REQUIRE(found == true);
     REQUIRE(fs::exists(destino / "dados.txt"));
 }
 
-TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]") {
+TEST_CASE("Caso 8 Restauração: arquivos iguais",
+    "[C8]") {
     namespace fs = std::filesystem;
     fs::path base = fs::path("tests") / "tmp_case_8";
     fs::remove_all(base);
@@ -279,14 +301,15 @@ TEST_CASE("Caso 8 - Restauração: arquivos iguais => Nada a fazer (A4)", "[C8]"
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "relatorio.txt" && p.second == 4) // A4 = Nada
+        if (p.first == "relatorio.txt" && p.second == 4)  // A4 = Nada
             found = true;
 
     REQUIRE(found == true);
     REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
 
-TEST_CASE("Caso 9 - Restauração: arquivo não existe em nenhum diretório => Impossível restaurar (A6)", "[C9]") {
+TEST_CASE("Caso 9 arquivo não existe em nenhum diretório",
+    "[C9]") {
     namespace fs = std::filesystem;
 
     // Base de teste isolada
@@ -309,7 +332,7 @@ TEST_CASE("Caso 9 - Restauração: arquivo não existe em nenhum diretório => I
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "fantasma.txt" && p.second == A6) // A6 = Impossível
+        if (p.first == "fantasma.txt" && p.second == A6)  // A6 = Impossível
             found = true;
 
     // Verifica se o caso foi identificado corretamente
@@ -319,7 +342,8 @@ TEST_CASE("Caso 9 - Restauração: arquivo não existe em nenhum diretório => I
     REQUIRE(!fs::exists(destino / "fantasma.txt"));
 }
 
-TEST_CASE("Caso 10 - Backup solicitado: arquivo não existe nem no HD nem no Pen => Impossível (A6)", "[C10]") {
+TEST_CASE("Caso 10 arquivo não existe nem no HD nem no Pen",
+    "[C10]") {
     namespace fs = std::filesystem;
 
     // Base isolada para este caso
@@ -342,7 +366,8 @@ TEST_CASE("Caso 10 - Backup solicitado: arquivo não existe nem no HD nem no Pen
 
     bool found = false;
     for (auto &p : res)
-        if (p.first == "arquivo_inexistente.txt" && p.second == A6) // A6 = Impossível
+        if (p.first == "arquivo_inexistente.txt"
+        && p.second == A6)  // A6 = Impossível
             found = true;
 
     REQUIRE(found == true);
@@ -351,17 +376,23 @@ TEST_CASE("Caso 10 - Backup solicitado: arquivo não existe nem no HD nem no Pen
     REQUIRE(!fs::exists(destino / "arquivo_inexistente.txt"));
 }
 
-// link-time: chamaremos a função real depois (aqui só declaro o wrapper)
-#include <utility>
-extern std::vector<std::pair<std::string,int>> executar_backup(
+extern std::vector<std::pair<std::string, int>> executar_backup(
     const std::string &backupParm,
     const std::string &dirHD,
     const std::string &dirPen,
     const std::string &dirDestino,
     bool backupSolicitado);
 
-static std::vector<std::pair<std::string,int>> run_proc(
-    const fs::path &parm, const fs::path &hd, const fs::path &pen, const fs::path &dest, bool backupSolicitado)
-{
-    return executar_backup(parm.string(), hd.string(), pen.string(), dest.string(), backupSolicitado);
+static std::vector<std::pair<std::string, int>> run_proc(
+    const fs::path &parm,
+    const fs::path &hd,
+    const fs::path &pen,
+    const fs::path &dest,
+    bool backupSolicitado) {
+    return executar_backup(
+    parm.string(),
+    hd.string(),
+    pen.string(),
+    dest.string(),
+    backupSolicitado);
 }

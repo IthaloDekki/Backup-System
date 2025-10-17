@@ -1,5 +1,7 @@
-#ifndef BACKUP_HPP
-#define BACKUP_HPP
+// Copyright 2025 Íthalo Júnio Medeiros de Oliveira Nóbrega
+
+#ifndef INCLUDE_BACKUP_HPP_
+#define INCLUDE_BACKUP_HPP_
 
 #include <string>
 #include <vector>
@@ -14,11 +16,11 @@ enum Acao {
     A6_IMPOSSIVEL
 };
 
-std::vector<std::pair<std::string,int>> executar_backup(
+std::vector<std::pair<std::string, int>> executar_backup(
     const std::string &backupParm,
     const std::string &dirHD,
     const std::string &dirPen,
     const std::string &dirDestino,
     bool backupSolicitado);
 
-#endif // BACKUP_HPP
+#endif  // INCLUDE_BACKUP_HPP_
