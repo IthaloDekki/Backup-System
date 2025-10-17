@@ -99,9 +99,12 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
     fs::remove_all(base);
     fs::create_directories(base / "hd");
     fs::create_directories(base / "pen");
-    fs::create_directories("backup-destino");
 
- 
+    // DESTINO isolado por caso
+    fs::path destino = base / "backup-destino";
+    fs::remove_all(destino);
+    fs::create_directories(destino);
+
     fs::path parm = base / "Backup.parm";
     std::ofstream(parm) << "relatorio.txt" << std::endl;
 
@@ -111,13 +114,13 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
     std::ofstream(arquivoHD) << "dados iguais";
     std::ofstream(arquivoPen) << "dados iguais";
 
-    // ajusta datas iguais nos dois arquivos
-    auto agora = std::filesystem::file_time_type::clock::now();
+    // ajusta datas iguais
+    auto agora = fs::file_time_type::clock::now();
     fs::last_write_time(arquivoHD, agora);
     fs::last_write_time(arquivoPen, agora);
 
-    // executa o backup
-    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", true);
+    // executa o backup passando o destino isolado
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, true);
 
     bool found = false;
     for (auto &p : res)
@@ -127,8 +130,9 @@ TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (
     REQUIRE(found == true);
 
     // O arquivo destino nao deve existir
-    REQUIRE(!fs::exists("backup-destino/relatorio.txt"));
+    REQUIRE(!fs::exists(destino / "relatorio.txt"));
 }
+
 
 
 

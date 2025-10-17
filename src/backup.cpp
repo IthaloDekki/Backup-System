@@ -62,6 +62,9 @@ std::vector<std::pair<std::string,int>> executar_backup(
         bool existeHD = fs::exists(caminhoHD);
         bool existePen = fs::exists(caminhoPen);
 
+        auto dataHD = existeHD ? fs::last_write_time(caminhoHD) : fs::file_time_type::min();
+        auto dataPen = existePen ? fs::last_write_time(caminhoPen) : fs::file_time_type::min();
+
         if (backupSolicitado && existeHD && !existePen) {
             fs::copy_file(caminhoHD, caminhoDestino, fs::copy_options::overwrite_existing, ec);
             resultados.emplace_back(nomeArquivo,
@@ -72,9 +75,12 @@ std::vector<std::pair<std::string,int>> executar_backup(
             resultados.emplace_back(nomeArquivo,
                 static_cast<int>(Acao::A2_COPIAR_PEN_HD));
         } 
+        else if (existeHD && existePen && dataHD == dataPen) {
+            // Mesmo timestamp ⇒ nada a fazer
+            resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
+        }
         else {
-            resultados.emplace_back(nomeArquivo,
-                static_cast<int>(Acao::A4_NADA));
+            resultados.emplace_back(nomeArquivo, static_cast<int>(Acao::A4_NADA));
         }
     }
 
