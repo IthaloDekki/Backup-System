@@ -92,6 +92,45 @@ TEST_CASE("Caso 3 - Restauração: arquivo no Pen e não no HD => Copiar Pen->HD
     REQUIRE(fs::exists("backup-destino/relatorio.txt"));
 }
 
+TEST_CASE("Caso 4 - Backup solicitado, arquivos com mesma data => Nada a fazer (A4)", "[C4]") {
+    namespace fs = std::filesystem;
+
+    fs::path base = fs::path("tests") / "tmp_case_4";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+    fs::create_directories("backup-destino");
+
+ 
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "relatorio.txt" << std::endl;
+
+    // Cria arquivo no HD e no Pen
+    fs::path arquivoHD = base / "hd" / "relatorio.txt";
+    fs::path arquivoPen = base / "pen" / "relatorio.txt";
+    std::ofstream(arquivoHD) << "dados iguais";
+    std::ofstream(arquivoPen) << "dados iguais";
+
+    // ajusta datas iguais nos dois arquivos
+    auto agora = std::filesystem::file_time_type::clock::now();
+    fs::last_write_time(arquivoHD, agora);
+    fs::last_write_time(arquivoPen, agora);
+
+    // executa o backup
+    auto res = run_proc(parm, base / "hd", base / "pen", "backup-destino", true);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "relatorio.txt" && p.second == 4) // A4 = Nada
+            found = true;
+
+    REQUIRE(found == true);
+
+    // O arquivo destino nao deve existir
+    REQUIRE(!fs::exists("backup-destino/relatorio.txt"));
+}
+
+
 
 
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
