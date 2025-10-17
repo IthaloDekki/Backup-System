@@ -212,6 +212,43 @@ TEST_CASE("Caso 6 - Backup solicitado, Pen mais novo que HD => Erro (A5)", "[C6]
     REQUIRE(!fs::exists(destino / "dados.txt"));
 }
 
+TEST_CASE("Caso 7 - Restauração: Pen mais novo que HD => Copiar Pen->HD (A2)", "[C7]") {
+    namespace fs = std::filesystem;
+
+    fs::path base = fs::path("tests") / "tmp_case_7";
+    fs::remove_all(base);
+    fs::create_directories(base / "hd");
+    fs::create_directories(base / "pen");
+    fs::path destino = base / "backup-destino";
+    fs::create_directories(destino);
+
+    // Cria Backup.parm
+    fs::path parm = base / "Backup.parm";
+    std::ofstream(parm) << "dados.txt" << std::endl;
+
+    // Cria arquivo no HD e no Pen (Pen mais novo)
+    fs::path arquivoHD = base / "hd" / "dados.txt";
+    fs::path arquivoPen = base / "pen" / "dados.txt";
+    std::ofstream(arquivoHD) << "versao antiga do HD";
+    std::ofstream(arquivoPen) << "versao nova do Pen";
+
+    // Ajusta timestamps
+    auto agora = fs::file_time_type::clock::now();
+    fs::last_write_time(arquivoHD, agora - std::chrono::hours(1)); // HD mais velho
+    fs::last_write_time(arquivoPen, agora); // Pen mais novo
+
+    // Executa restauração (backupSolicitado = false)
+    auto res = run_proc(parm, base / "hd", base / "pen", destino, false);
+
+    bool found = false;
+    for (auto &p : res)
+        if (p.first == "dados.txt" && p.second == 2) // A2 = Copiar Pen->HD
+            found = true;
+
+    REQUIRE(found == true);
+    REQUIRE(fs::exists(destino / "dados.txt"));
+}
+
 
 // link-time: chamaremos a função real depois (aqui só declaro o wrapper)
 #include <utility>
