@@ -376,12 +376,61 @@ TEST_CASE("Caso 10 arquivo não existe nem no HD nem no Pen",
     REQUIRE(!fs::exists(destino / "arquivo_inexistente.txt"));
 }
 
+/********************************************************************
+* Função: executar_backup
+* Descrição
+* Executa o processo principal de backup e restauração, analisando o
+* arquivo de parâmetros e realizando as cópias entre diretórios HD e Pen
+* conforme o modo solicitado (backup ou restauração).
+*
+* Parâmetros
+* backupParm - caminho para o arquivo de parâmetros (.parm)
+* dirHD - diretório local do HD
+* dirPen - diretório do Pen Drive
+* dirDestino - diretório destino onde os arquivos serão copiados
+* backupSolicitado - define se é operação de backup (true) ou restauração (false)
+*
+* Valor retornado
+* Retorna um vetor de pares (string, int) onde:
+*   - string representa o nome do arquivo processado
+*   - int representa o código da ação realizada (A1–A6)
+*
+* Assertivas de entrada
+* backupParm não deve ser uma string vazia
+* Os diretórios informados devem existir
+* O parâmetro backupSolicitado indica a direção da cópia (HD→Pen ou Pen→HD)
+********************************************************************/
+
 extern std::vector<std::pair<std::string, int>> executar_backup(
     const std::string &backupParm,
     const std::string &dirHD,
     const std::string &dirPen,
     const std::string &dirDestino,
     bool backupSolicitado);
+
+
+/********************************************************************
+* Função: run_proc
+* Descrição
+* Função auxiliar para executar o processo de backup/restauração,
+* convertendo os parâmetros do tipo fs::path para string e chamando
+* a função principal executar_backup.
+*
+* Parâmetros
+* parm - caminho do arquivo de parâmetros (.parm)
+* hd - diretório do HD
+* pen - diretório do Pen Drive
+* dest - diretório destino para cópias
+* backupSolicitado - true para backup, false para restauração
+*
+* Valor retornado
+* Retorna o mesmo vetor de pares (string, int) resultante de executar_backup,
+* representando os arquivos processados e seus respectivos códigos de ação.
+*
+* Assertivas de entrada
+* Todos os caminhos fornecidos devem existir e ser acessíveis
+* A função executar_backup deve estar corretamente implementada e disponível
+********************************************************************/
 
 static std::vector<std::pair<std::string, int>> run_proc(
     const fs::path &parm,
