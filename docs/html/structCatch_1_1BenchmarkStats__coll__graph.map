@@ -1,0 +1,9 @@
+<map id="Catch::BenchmarkStats&lt; Dummy &gt;" name="Catch::BenchmarkStats&lt; Dummy &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="381,58,556,98"/>
+<area shape="rect" id="Node000002" href="$structCatch_1_1BenchmarkInfo.html" title=" " alt="" coords="25,5,192,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,23,281,32,358,45,402,55,401,60,357,50,280,37,205,29"/>
+<area shape="rect" id="Node000003" href="$structCatch_1_1Benchmark_1_1Estimate.html" title=" " alt="" coords="5,58,212,98"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,75,381,75,381,81,226,81"/>
+<area shape="rect" id="Node000004" href="$structCatch_1_1Benchmark_1_1OutlierClassification.html" title=" " alt="" coords="12,122,205,162"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,120,357,95,380,91,381,96,358,101,219,125"/>
+</map>

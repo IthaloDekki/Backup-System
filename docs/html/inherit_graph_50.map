@@ -1,0 +1,33 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classCatch_1_1Detail_1_1NonCopyable.html" title="Deriving classes become noncopyable and nonmovable." alt="" coords="5,255,207,281"/>
+<area shape="rect" id="Node000001" href="$structCatch_1_1AutoReg.html" title=" " alt="" coords="269,115,391,141"/>
+<area shape="poly" id="edge20_Node000000_Node000001" title=" " alt="" coords="129,244,183,198,253,151,283,138,285,143,256,156,186,202,132,248"/>
+<area shape="rect" id="Node000002" href="$structCatch_1_1Clara_1_1Detail_1_1BoundRef.html" title=" " alt="" coords="256,165,404,205"/>
+<area shape="poly" id="edge21_Node000000_Node000002" title=" " alt="" coords="153,248,274,203,276,208,155,253"/>
+<area shape="rect" id="Node000011" href="$classCatch_1_1IConfig.html" title=" " alt="" coords="274,230,386,255"/>
+<area shape="poly" id="edge30_Node000000_Node000011" title=" " alt="" coords="220,252,273,246,274,252,221,258"/>
+<area shape="rect" id="Node000013" href="$classCatch_1_1Section.html" title=" " alt="" coords="273,279,387,305"/>
+<area shape="poly" id="edge32_Node000000_Node000013" title=" " alt="" coords="221,278,273,283,272,289,220,283"/>
+<area shape="rect" id="Node000014" href="$classCatch_1_1Session.html" title=" " alt="" coords="271,329,389,354"/>
+<area shape="poly" id="edge33_Node000000_Node000014" title=" " alt="" coords="159,282,256,315,290,326,288,331,254,320,157,288"/>
+<area shape="rect" id="Node000015" href="$structCatch_1_1TestCaseInfo.html" title=" " alt="" coords="255,378,405,403"/>
+<area shape="poly" id="edge34_Node000000_Node000015" title=" " alt="" coords="135,287,190,326,256,364,283,375,281,380,253,369,187,330,132,291"/>
+<area shape="rect" id="Node000003" href="$structCatch_1_1Clara_1_1Detail_1_1BoundFlagRefBase.html" title=" " alt="" coords="457,69,611,109"/>
+<area shape="poly" id="edge22_Node000002_Node000003" title=" " alt="" coords="390,157,404,151,493,107,495,112,406,156,393,162"/>
+<area shape="rect" id="Node000006" href="$structCatch_1_1Clara_1_1Detail_1_1BoundValueRefBase.html" title=" " alt="" coords="453,165,615,205"/>
+<area shape="poly" id="edge25_Node000002_Node000006" title=" " alt="" coords="418,183,453,183,453,188,418,188"/>
+<area shape="rect" id="Node000004" href="$structCatch_1_1Clara_1_1Detail_1_1BoundFlagLambda.html" title=" " alt="" coords="663,5,851,45"/>
+<area shape="poly" id="edge23_Node000003_Node000004" title=" " alt="" coords="617,63,686,43,687,48,618,68"/>
+<area shape="rect" id="Node000005" href="$structCatch_1_1Clara_1_1Detail_1_1BoundFlagRef.html" title=" " alt="" coords="683,69,831,109"/>
+<area shape="poly" id="edge24_Node000003_Node000005" title=" " alt="" coords="625,87,682,87,682,92,625,92"/>
+<area shape="rect" id="Node000007" href="$structCatch_1_1Clara_1_1Detail_1_1BoundLambda.html" title=" " alt="" coords="677,133,837,173"/>
+<area shape="poly" id="edge26_Node000006_Node000007" title=" " alt="" coords="628,169,676,162,677,167,628,174"/>
+<area shape="rect" id="Node000009" href="$structCatch_1_1Clara_1_1Detail_1_1BoundValueRef.html" title=" " alt="" coords="673,197,840,237"/>
+<area shape="poly" id="edge28_Node000006_Node000009" title=" " alt="" coords="629,196,673,203,673,208,628,201"/>
+<area shape="rect" id="Node000010" href="$structCatch_1_1Clara_1_1Detail_1_1BoundValueRef_3_01std_1_1vector_3_01T_01_4_01_4.html" title=" " alt="" coords="675,262,839,317"/>
+<area shape="poly" id="edge29_Node000006_Node000010" title=" " alt="" coords="600,209,616,216,664,247,690,260,687,264,661,252,613,221,598,213"/>
+<area shape="rect" id="Node000008" href="$structCatch_1_1Clara_1_1Detail_1_1BoundManyLambda.html" title=" " alt="" coords="899,133,1095,173"/>
+<area shape="poly" id="edge27_Node000007_Node000008" title=" " alt="" coords="851,151,898,151,898,156,851,156"/>
+<area shape="rect" id="Node000012" href="$classCatch_1_1Config.html" title=" " alt="" coords="480,230,588,255"/>
+<area shape="poly" id="edge31_Node000011_Node000012" title=" " alt="" coords="400,240,480,240,480,245,400,245"/>
+</map>

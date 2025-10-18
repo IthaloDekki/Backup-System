@@ -1,0 +1,11 @@
+<map id="Catch::Clara::Arg" name="Catch::Clara::Arg">
+<area shape="rect" id="Node000001" title=" " alt="" coords="162,316,293,341"/>
+<area shape="rect" id="Node000002" href="$classCatch_1_1Clara_1_1Detail_1_1ParserRefImpl.html" title=" " alt="" coords="141,227,314,267"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,280,230,316,225,316,225,280"/>
+<area shape="rect" id="Node000003" href="$classCatch_1_1Clara_1_1Detail_1_1ComposableParserImpl.html" title=" " alt="" coords="5,95,185,149"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="136,157,209,225,205,228,132,161"/>
+<area shape="rect" id="Node000004" href="$classCatch_1_1Clara_1_1Detail_1_1ParserBase.html" title=" " alt="" coords="21,5,169,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="98,59,98,95,93,95,93,59"/>
+<area shape="rect" id="Node000005" href="$classCatch_1_1StringRef.html" title=" " alt="" coords="209,109,336,135"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="266,149,237,227,232,225,261,147"/>
+</map>

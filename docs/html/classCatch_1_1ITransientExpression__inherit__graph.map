@@ -1,0 +1,7 @@
+<map id="Catch::ITransientExpression" name="Catch::ITransientExpression">
+<area shape="rect" id="Node000001" title=" " alt="" coords="77,5,278,31"/>
+<area shape="rect" id="Node000002" href="$classCatch_1_1BinaryExpr.html" title=" " alt="" coords="5,79,155,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,41,105,81,102,76,151,37"/>
+<area shape="rect" id="Node000003" href="$classCatch_1_1UnaryExpr.html" title=" " alt="" coords="179,86,373,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,37,263,84,260,88,201,41"/>
+</map>

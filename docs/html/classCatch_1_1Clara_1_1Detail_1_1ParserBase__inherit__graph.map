@@ -1,0 +1,27 @@
+<map id="Catch::Clara::Detail::ParserBase" name="Catch::Clara::Detail::ParserBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,170,153,210"/>
+<area shape="rect" id="Node000002" href="$classCatch_1_1Clara_1_1Detail_1_1ComposableParserImpl.html" title=" " alt="" coords="201,5,381,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,157,147,113,200,69,219,58,222,62,203,74,150,117,108,161"/>
+<area shape="rect" id="Node000003" href="$classCatch_1_1Clara_1_1Detail_1_1ComposableParserImpl.html" title=" " alt="" coords="201,84,381,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,163,216,136,218,141,148,168"/>
+<area shape="rect" id="Node000005" href="$classCatch_1_1Clara_1_1Detail_1_1ComposableParserImpl.html" title=" " alt="" coords="201,163,381,217"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="167,187,201,187,201,193,167,193"/>
+<area shape="rect" id="Node000006" href="$classCatch_1_1Clara_1_1Detail_1_1ComposableParserImpl.html" title=" " alt="" coords="201,241,381,296"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="148,212,218,239,216,244,146,217"/>
+<area shape="rect" id="Node000013" href="$classCatch_1_1Clara_1_1Parser.html" title=" " alt="" coords="217,320,366,345"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="106,219,148,265,174,287,203,306,228,317,226,322,200,311,171,291,145,268,102,223"/>
+<area shape="rect" id="Node000004" href="$classCatch_1_1Clara_1_1ExeName.html" title=" " alt="" coords="449,99,620,124"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="395,109,449,109,449,114,395,114"/>
+<area shape="rect" id="Node000007" href="$classCatch_1_1Clara_1_1Detail_1_1ParserRefImpl.html" title=" " alt="" coords="448,185,621,225"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="394,239,457,222,458,227,395,244"/>
+<area shape="rect" id="Node000009" href="$classCatch_1_1Clara_1_1Detail_1_1ParserRefImpl.html" title=" " alt="" coords="447,249,622,289"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="395,266,447,266,447,271,395,271"/>
+<area shape="rect" id="Node000012" href="$classCatch_1_1Clara_1_1Detail_1_1ParserRefImpl.html" title=" " alt="" coords="429,313,640,353"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="395,293,458,310,457,315,394,298"/>
+<area shape="rect" id="Node000008" href="$classCatch_1_1Clara_1_1Arg.html" title=" " alt="" coords="689,192,819,217"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="635,202,688,202,688,207,635,207"/>
+<area shape="rect" id="Node000010" href="$classCatch_1_1Clara_1_1Opt.html" title=" " alt="" coords="688,256,820,281"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="636,266,687,266,687,271,636,271"/>
+<area shape="rect" id="Node000011" href="$structCatch_1_1Clara_1_1Help.html" title=" " alt="" coords="868,256,1007,281"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="834,266,867,266,867,271,834,271"/>
+</map>

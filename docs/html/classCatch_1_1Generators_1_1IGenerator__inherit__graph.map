@@ -1,0 +1,19 @@
+<map id="Catch::Generators::IGenerator&lt; T &gt;" name="Catch::Generators::IGenerator&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="228,221,375,261"/>
+<area shape="rect" id="Node000003" href="$classCatch_1_1Generators_1_1FilterGenerator.html" title=" " alt="" coords="451,5,597,60"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="316,207,358,139,387,102,421,71,449,53,452,58,424,75,391,106,362,142,321,209"/>
+<area shape="rect" id="Node000004" href="$classCatch_1_1Generators_1_1FixedValuesGenerator.html" title=" " alt="" coords="423,85,625,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="329,208,370,170,421,134,447,122,449,127,424,139,374,174,333,212"/>
+<area shape="rect" id="Node000005" href="$classCatch_1_1Generators_1_1Generators.html" title=" " alt="" coords="451,149,597,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="374,214,422,198,459,186,461,191,423,203,376,219"/>
+<area shape="rect" id="Node000006" href="$classCatch_1_1Generators_1_1MapGenerator.html" title=" " alt="" coords="444,213,604,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="388,238,444,238,444,243,388,243"/>
+<area shape="rect" id="Node000007" href="$classCatch_1_1Generators_1_1RepeatGenerator.html" title=" " alt="" coords="439,293,609,333"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="376,263,423,278,461,290,459,295,422,283,374,268"/>
+<area shape="rect" id="Node000008" href="$classCatch_1_1Generators_1_1SingleValueGenerator.html" title=" " alt="" coords="423,357,625,397"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="333,269,374,307,424,342,449,354,447,359,421,347,370,311,329,273"/>
+<area shape="rect" id="Node000009" href="$classCatch_1_1Generators_1_1TakeGenerator.html" title=" " alt="" coords="447,421,601,461"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="320,272,361,340,390,376,424,407,448,420,445,424,421,411,386,380,357,343,316,275"/>
+<area shape="rect" id="Node000002" href="$classCatch_1_1Generators_1_1GeneratorUntypedBase.html" title=" " alt="" coords="5,221,180,261"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,238,228,238,228,243,194,243"/>
+</map>
