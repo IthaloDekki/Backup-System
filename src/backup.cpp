@@ -14,20 +14,46 @@ namespace fs = std::filesystem;
 /***************************************************************************
 * Função: executar_backup
 * Descrição:
-*   Realiza o processo de backup ou restauração baseado no arquivo Backup.parm
+*   Realiza o processo de backup ou restauração baseado no arquivo
+*   "Backup.parm", copiando os arquivos conforme as condições da
+*   tabela de decisão. Pode operar no modo backup (HD → Pen) ou
+*   restauração (Pen → HD).
+*
 * Parâmetros:
 *   backupParm - caminho do arquivo de parâmetros (Backup.parm)
-*   dirHD - diretório simulando o HD
+*   dirHD - diretório simulando o HD local
 *   dirPen - diretório simulando o Pen-drive
-*   dirDestino - diretório destino de cópia
-*   backupSolicitado - true se for backup (HD→Pen), false se restauração (Pen→HD)
+*   dirDestino - diretório destino de cópia (onde os arquivos serão salvos)
+*   backupSolicitado - true se for backup (HD → Pen), false se for restauração
+*
 * Valor retornado:
-*   Vetor com pares (nome do arquivo, código da ação)
+*   Vetor de pares <nome do arquivo, código da ação> indicando o resultado
+*   de cada operação realizada (ex: cópia, erro, nada a fazer, etc).
+*
 * Assertivas de entrada:
 *   backupParm != ""
 *   dirHD != ""
 *   dirDestino != ""
+*
+* Assertivas de saída:
+*   O vetor retornado não é nulo
+*   Cada par no vetor contém o nome de um arquivo existente no Backup.parm
+*   e o código correspondente à ação executada.
+*
+* Condições de erro tratadas:
+*   - Arquivo Backup.parm inexistente → ação A6_IMPOSSIVEL
+*   - Arquivos inexistentes em ambas as origens → ação A6_IMPOSSIVEL
+*   - Conflito de datas entre HD e Pen → ação A5_ERRO
+*
+* Valor retornado:
+*   Veja os códigos definidos em enum Acao:
+*       A1_COPIAR_HD_PEN
+*       A2_COPIAR_PEN_HD
+*       A4_NADA
+*       A5_ERRO
+*       A6_IMPOSSIVEL
 ***************************************************************************/
+
 
 std::vector<std::pair<std::string, int>> executar_backup(
     const std::string &backupParm,
